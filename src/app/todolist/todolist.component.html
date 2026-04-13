@@ -1,67 +1,98 @@
-<ion-text color="">
-  <h1>Gestión de tareas</h1>
-</ion-text>
-
-<ion-button class="buttons" shape="round" color="success" id="open-modal" expand="block">
-  Agregar tarea
-  <ion-icon slot="end" name="heart"></ion-icon>
-</ion-button>
-
-<ion-content color="light">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Gestion Tareas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 
 
-  <ion-list [inset]="true">
-    <ion-list-header>
-      <ion-label>Tareas creadas</ion-label>
-    </ion-list-header>
- <ion-item>
-       <ion-col >Nombre</ion-col>
-       <ion-col> Descripción</ion-col>
-          <ion-col> Categoria</ion-col>
-          <ion-col size="auto">
-               Detalle
-          </ion-col>
- </ion-item>
- 
-    @for (item of tasks; track item.id) {
+
+<ion-content [fullscreen]="true">
+
+
+  <div style="margin: 20px; ">
+    <ion-button class="buttons" shape="round" color="warning" expand="100px" style="width: 200px;" (click)="navigate()">
+      Gestion categorias
+    </ion-button>
+
+  </div>
+
+  @if (cargando) {
+  <div style="text-align: center; margin-top: 100px;">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  }@else{
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Gestión categorias</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card>
+    <ion-title>
+      Crear tarea
+    </ion-title>
     <ion-item>
-
-
-      <ion-grid>
-        <ion-row>
-           <ion-col >{{ item.name }}</ion-col>
-             <ion-col> {{ item.description }}</ion-col>
-          <ion-col > 
-
-                 <ion-list>
-  <ion-item>
-    <ion-select aria-label="Favorite Fruit" value="{{item.status}}"  (ionChange)="handleChange($event, item)">
-      <ion-select-option value="POR HACER">POR HACER</ion-select-option>
-      <ion-select-option value="PROCESO">PROCESO </ion-select-option>
-      <ion-select-option value="TERMINADA">TERMINADA</ion-select-option>
-    </ion-select>
-  </ion-item>
-</ion-list>
-          
-          </ion-col>
-          <ion-col size="auto">
-            <div>
-         
-              <ion-button color="danger" shape="round" (click)="deleteTask(item.id)">Eliminar</ion-button>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
+      <ion-input label="Escriba el nombre de la tarea" labelPlacement="stacked" type="text" [(ngModel)]="name">
+      </ion-input>
+      
 
     </ion-item>
 
+      <ion-item>
+      <ion-input label="Escriba el nombre de la descripción" labelPlacement="stacked" type="text" [(ngModel)]="description">
+      </ion-input>
+
+    </ion-item>
+
+  </ion-card>
+
+
+
+
+  <div style="margin: 20px;">
+    <ion-button style="margin: 20px; text-align: center;" class="" shape="round" color="success" expand="100px"
+     [disabled]="name===''&&description===''"  (click)="createNewTask()">
+      Agregar tarea
+    </ion-button>
+
+  </div>
+  <ion-list>
+
+
+    <ion-list-header>
+      <ion-label> Lista de tareas</ion-label>
+    </ion-list-header>
+
+    @for (task of tasks; track $index) {
+    <ion-item color="{{task.status==='POR HACER'?'warning':task.status==='PROCESO'?'primary':'success'}}">
+      <ion-label>
+        Nombre de la tarea: {{task.name}}
+        <p>Descripción: {{task.description}}</p>
+        <p>Estado: {{task.status}}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-item>
+          <ion-select aria-label="Favorite Fruit" value="{{task.status}}" (ionChange)="handleChange($event, task)">
+            <ion-select-option value="POR HACER">POR HACER</ion-select-option>
+            <ion-select-option value="PROCESO">PROCESO </ion-select-option>
+            <ion-select-option value="TERMINADA">TERMINADA</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+
+        <ion-button (click)="deleteTask(task.id)">
+          <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
     }
   </ion-list>
+
+  }
+
+
 </ion-content>
 
 
-
-
-
-<app-modalcreatetask (sendNewTask)="createNewTask($event)"></app-modalcreatetask>

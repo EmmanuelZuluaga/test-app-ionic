@@ -2,50 +2,74 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   Firestore,
-  collectionData, collection,
-  doc, docData, getDoc, setDoc, updateDoc, deleteDoc,
-  DocumentReference
+  collectionData,
+  collection,
+  doc,
+  docData,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  DocumentReference,
 } from '@angular/fire/firestore';
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import { TaskToDo } from 'src/app/models/task.model';
+import { Category } from 'src/app/models/category.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirestoreService {
-    private firestore: Firestore = inject(Firestore); // inject Cloud Firestore
+  private firestore: Firestore = inject(Firestore); // inject Cloud Firestore
 
-    constructor() {
-  
-    }
+  constructor() {}
 
+  getTasks<tipo>() {
+    const userProfileCollection = collection(this.firestore, 'tasks');
+    return collectionData(userProfileCollection) as Observable<tipo[]>;
+  }
 
-    getTasks<tipo>(){
-       const userProfileCollection = collection(this.firestore,'tasks');
-      return collectionData(userProfileCollection) as Observable<tipo[]>;
-    }
-
-      createTask(data: TaskToDo) {
+  createTask(data: TaskToDo) {
     const document = doc(this.firestore, `tasks/${data.id}`);
     return setDoc(document, data);
   }
-    
-  deleteTask( idTask: string) {
+
+  deleteTask(idTask: string) {
     const document = doc(this.firestore, `tasks/${idTask}`);
     return deleteDoc(document);
   }
 
-
-    async updateTask(data: any) {
-     const document = doc(this.firestore, `tasks/${data.id}`);
-    return updateDoc(document, data)
+  async updateTask(data: any) {
+    const document = doc(this.firestore, `tasks/${data.id}`);
+    return updateDoc(document, data);
   }
 
+  getCategories<tipo>() {
+    const userProfileCollection = collection(this.firestore, 'categories');
+    return collectionData(userProfileCollection) as Observable<tipo[]>;
+  }
 
+  createCategory(data: Category) {
+    const document = doc(this.firestore, `categories/${data.id}`);
+    return setDoc(document, data);
+  }
+
+  deleteCategory(idTask: string) {
+    const document = doc(this.firestore, `categories/${idTask}`);
+    return deleteDoc(document);
+  }
+
+  async updateCategory(data: any) {
+    const document = doc(this.firestore, `categories/${data.id}`);
+    return updateDoc(document, data);
+  }
 
   getDocument<tipo>(enlace: string) {
-    const document = doc(this.firestore, enlace) as DocumentReference<tipo, any>;
-    return getDoc<tipo, any>(document)
+    const document = doc(this.firestore, enlace) as DocumentReference<
+      tipo,
+      any
+    >;
+    return getDoc<tipo, any>(document);
   }
 
   getDocumentChanges<tipo>(enlace: string) {
@@ -69,15 +93,14 @@ export class FirestoreService {
     return setDoc(document, data);
   }
 
-
   async updateDocumentID(data: any, enlace: string, idDoc: string) {
     const document = doc(this.firestore, `${enlace}/${idDoc}`);
-    return updateDoc(document, data)
+    return updateDoc(document, data);
   }
 
   async updateDocument(data: any, enlace: string) {
     const document = doc(this.firestore, enlace);
-    return updateDoc(document, data)
+    return updateDoc(document, data);
   }
 
   deleteDocumentID(enlace: string, idDoc: string) {
@@ -86,12 +109,10 @@ export class FirestoreService {
   }
 
   deleteDocFromRef(ref: any) {
-    return deleteDoc(ref)
+    return deleteDoc(ref);
   }
 
   createIdDoc() {
-    return uuidv4()
+    return uuidv4();
   }
-
-
-  }
+}

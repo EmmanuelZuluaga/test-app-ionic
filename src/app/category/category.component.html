@@ -1,3 +1,112 @@
-<p>
-  category works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Gestion Categorias
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+
+<div style="margin: 20px; ">
+    <ion-button class="buttons" shape="round" color="warning" expand="100px" style="width: 200px;" (click)="navigate()">
+      Gestion tareas
+    </ion-button>
+
+  </div>
+
+  @if (cargando) {
+  <div style="text-align: center; margin-top: 100px;">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  }@else{
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Gestión categorias</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card>
+    <ion-title>
+      Crear categoria
+    </ion-title>
+    <ion-item>
+      <ion-input label="Escriba el nombre de la categoria" labelPlacement="stacked" type="text" [(ngModel)]="name">
+      </ion-input>
+
+    </ion-item>
+
+  </ion-card>
+
+
+
+
+  <div style="margin: 20px;">
+    <ion-button style="margin: 20px; text-align: center;" class="" shape="round" color="success" expand="100px" (click)="createNewCategory()" [disabled]="name===''">
+      Agregar categoria
+    </ion-button>
+
+  </div>
+  <ion-list>
+
+    
+     <ion-list-header>
+    <ion-label 
+    > Lista de categorias</ion-label>
+  </ion-list-header>
+    
+    @for (category of categories; track $index) {
+    <ion-item>
+      <ion-label>
+        Nombre categoria: {{category.name}}
+        <p>Numero de tareas asociadas: {{category.tasks.length}}</p>
+
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="selectListTask(category.tasks, category)">
+          <ion-icon slot="icon-only" name="document-text-outline" color="warning"></ion-icon>
+        </ion-button>
+        <ion-button id="open-modal" (click)="selectCategoryEdit(category)">
+          <ion-icon slot="icon-only" name="create" color="primary"></ion-icon>
+        </ion-button>
+
+        <ion-button (click)="deleteCategory(category.id)">
+          <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    }
+  </ion-list>
+
+
+  @if(tasksOfCategory.length>0){
+
+
+    
+  <ion-list style="margin-top: 30px;">
+
+     <ion-list-header>
+    <ion-label 
+    >Tareas de la categoria: {{updateCategory.name}}</ion-label>
+  </ion-list-header>
+    @for (task of tasksOfCategory; track $index) {
+    <ion-item>
+      <ion-label>
+        Nombre de la tarea: {{task.name}}
+        <p>Descripción de la tarea: {{task.description}}</p>
+
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+  }
+
+
+
+  }
+
+
+</ion-content>
+<app-create-edit-category (sendNewCategory)="editNewCategory($event)" [isOpen]="isModalOpen"
+  [updateCategory]="updateCategory"></app-create-edit-category>

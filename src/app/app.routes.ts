@@ -6,12 +6,12 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
     {
-    path: 'list',
+    path: 'gestion-tareas',
     loadComponent: () => import('./todolist/todolist.component').then((m) => m.TodolistComponent),
   },
       {
-    path: 'modal',
-    loadComponent: () => import('./modalcreatetask/modalcreatetask.component').then((m) => m.ModalcreatetaskComponent),
+    path: 'gestion-categorias',
+    loadComponent: () => import('./category/category.component').then((m) => m.CategoryComponent),
   },
   {
     path: '',
