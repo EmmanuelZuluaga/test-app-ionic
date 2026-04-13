@@ -1,0 +1,67 @@
+<ion-text color="">
+  <h1>Gestión de tareas</h1>
+</ion-text>
+
+<ion-button class="buttons" shape="round" color="success" id="open-modal" expand="block">
+  Agregar tarea
+  <ion-icon slot="end" name="heart"></ion-icon>
+</ion-button>
+
+<ion-content color="light">
+
+
+  <ion-list [inset]="true">
+    <ion-list-header>
+      <ion-label>Tareas creadas</ion-label>
+    </ion-list-header>
+ <ion-item>
+       <ion-col >Nombre</ion-col>
+       <ion-col> Descripción</ion-col>
+          <ion-col> Categoria</ion-col>
+          <ion-col size="auto">
+               Detalle
+          </ion-col>
+ </ion-item>
+ 
+    @for (item of tasks; track item.id) {
+    <ion-item>
+
+
+      <ion-grid>
+        <ion-row>
+           <ion-col >{{ item.name }}</ion-col>
+             <ion-col> {{ item.description }}</ion-col>
+          <ion-col > 
+
+                 <ion-list>
+  <ion-item>
+    <ion-select aria-label="Favorite Fruit" value="{{item.status}}"  (ionChange)="handleChange($event, item)">
+      <ion-select-option value="POR HACER">POR HACER</ion-select-option>
+      <ion-select-option value="PROCESO">PROCESO </ion-select-option>
+      <ion-select-option value="TERMINADA">TERMINADA</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list>
+          
+          </ion-col>
+          <ion-col size="auto">
+            <div>
+         
+              <ion-button color="danger" shape="round" (click)="deleteTask(item.id)">Eliminar</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+    </ion-item>
+
+    }
+  </ion-list>
+</ion-content>
+
+
+
+
+
+<app-modalcreatetask (sendNewTask)="createNewTask($event)"></app-modalcreatetask>
